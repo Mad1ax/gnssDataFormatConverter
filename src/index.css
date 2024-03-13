@@ -1,0 +1,124 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+  display: grid;
+  width: 80%;
+  margin: 10px;
+}
+
+textarea::placeholder {
+  text-align: center;
+}
+
+textarea {
+  height: 100%;
+}
+.buttonContainer button,
+#spanButton {
+  width: 200px;
+  margin-bottom: 5px;
+}
+
+#accordion {
+  margin-top: 5px;
+}
+
+.inputContainer {
+  display: grid;
+  grid-template-columns: 225px 225px auto;
+  min-height: 200px;
+}
+
+#collapseOne {
+  padding: 0px;
+}
+
+.loaded_hiding {
+  transition: 0.3s opacity;
+  opacity: 0;
+}
+
+.card-body {
+  margin: 0;
+}
+
+.buttonContainer {
+  text-align: center;
+  min-width: 210px;
+}
+
+.mainTableCeil {
+  width: 15%;
+}
+
+.kmTableCeil {
+  width: 30px;
+}
+
+.input-file {
+  position: relative;
+  display: inline-block;
+}
+.input-file span {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+  width: 190px;
+  vertical-align: middle;
+  color: rgb(255 255 255);
+  text-align: center;
+
+  border: 1px solid #6c757d;
+  border-radius: 6px;
+  height: 38px;
+  padding: 5px;
+  box-sizing: border-box;
+  margin: 0;
+  transition: background-color 0.2s;
+}
+.input-file input[type='file'] {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  display: block;
+}
+
+.spanContainer {
+  display: flex;
+  margin: 9px;
+}
+
+.input-file input[type='file']:focus + span {
+  box-shadow: 0 0;
+}
+
+.infoContainer {
+  min-width: 210px;
+}
+
+.aboutContainer {
+  min-width: 210px;
+}
+
+.controlContainer {
+  
+  width: 225px;
+}
+
+.textAreaContainer {
+  width: 225px;
+}
