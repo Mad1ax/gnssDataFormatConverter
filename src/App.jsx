@@ -206,7 +206,7 @@ const App = () => {
           finalLatDD = latA + '.' + (+latMM / 0.000006).toFixed(0);
           finalLatDMM = currentLat;
           finalLatDMS =
-            latA + '°' + latB + `'` + (Number(latC) * 0.006).toFixed(3) + `"`;
+            latA + '°' + latB + `'` + (Number(latC) * 0.00006).toFixed(3) + `"`;
 
           finalLongDD = longA + `.` + (+longMM / 0.000006).toFixed(0);
           finalLongDMM = currentLong;
@@ -215,7 +215,7 @@ const App = () => {
             '°' +
             longB +
             `'` +
-            (Number(longC) * 0.006).toFixed(3) +
+            (Number(longC) * 0.00006).toFixed(3) +
             `"`;
         } else if (dataFormat === `DD.DDDD`) {
           latA = currentLat.slice(0, latDegreeIndex);
@@ -223,8 +223,10 @@ const App = () => {
           longA = currentLong.slice(0, longDegreeIndex);
           longMM = currentLong.slice(longDegreeIndex, currentLong.length);
           finalLatDD = currentLat;
+
           finalLatDMM =
             latA.toString() + '°' + (Number(latMM) * 60).toFixed(6) + `'`;
+
           latDotIndexDms = finalLatDMM.indexOf('.');
           finalLatDMS =
             finalLatDMM.slice(0, latDotIndexDms) +
@@ -235,10 +237,12 @@ const App = () => {
             ).toFixed(3) +
             `"`;
           finalLatDMM =
-            latA.toString() + '°' + (Number(latMM) * 60).toFixed(4) + `'`;
+            latA.toString() + '°' + (Number(latMM) * 60).toFixed(6) + `'`;
           finalLongDD = currentLong;
+          
           finalLongDMM =
             longA.toString() + '°' + (Number(longMM) * 60).toFixed(6) + `'`;
+
           longDotIndexDms = finalLongDMM.indexOf('.');
           finalLongDMS =
             finalLongDMM.slice(0, longDotIndexDms) +
@@ -249,7 +253,7 @@ const App = () => {
             ).toFixed(3) +
             `"`;
           finalLongDMM =
-            longA.toString() + '°' + (Number(longMM) * 60).toFixed(4) + `'`;
+            longA.toString() + '°' + (Number(longMM) * 60).toFixed(6) + `'`;
         } else {
           console.log('incorrectDataFormat');
         }
