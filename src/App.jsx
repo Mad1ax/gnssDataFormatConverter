@@ -8,7 +8,7 @@ import InfoContainer from './components/infoContainer';
 import ButtonsContainer from './components/buttonsContainer';
 
 const App = () => {
-  const currentVersion = '2.1'
+  const currentVersion = '2.3';
   useEffect(() => {
     console.log(`current version v ${currentVersion}`);
   }, []);
@@ -205,18 +205,14 @@ const App = () => {
 
           finalLatDD = latA + '.' + (+latMM / 0.000006).toFixed(0);
           finalLatDMM = currentLat;
+          // console.log('latC',latC);
           finalLatDMS =
-            latA + '°' + latB + `'` + (Number(latC) * 0.00006).toFixed(3) + `"`;
+            latA + '°' + latB + `'` + (Number(latC) * 6).toFixed(3) + `"`;
 
           finalLongDD = longA + `.` + (+longMM / 0.000006).toFixed(0);
           finalLongDMM = currentLong;
           finalLongDMS =
-            longA +
-            '°' +
-            longB +
-            `'` +
-            (Number(longC) * 0.00006).toFixed(3) +
-            `"`;
+            longA + '°' + longB + `'` + (Number(longC) * 6).toFixed(3) + `"`;
         } else if (dataFormat === `DD.DDDD`) {
           latA = currentLat.slice(0, latDegreeIndex);
           latMM = currentLat.slice(latDegreeIndex, currentLat.length);
@@ -239,7 +235,7 @@ const App = () => {
           finalLatDMM =
             latA.toString() + '°' + (Number(latMM) * 60).toFixed(6) + `'`;
           finalLongDD = currentLong;
-          
+
           finalLongDMM =
             longA.toString() + '°' + (Number(longMM) * 60).toFixed(6) + `'`;
 
