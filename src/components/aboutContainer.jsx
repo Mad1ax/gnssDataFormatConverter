@@ -46,7 +46,7 @@ const AboutContainer = () => {
                     поддерживаемые форматы: DD.DDDD, DD°MMMM, DD°MM'SS"
                   </li>
                   <li className='list-group-item p-1'>
-                    поддерживаемые разделители: ',' ';' 'пробел'
+                    поддерживаемые разделители: ',' ';'
                   </li>
                   <li className='list-group-item p-1'>
                     пример: 59.19832,37.16498

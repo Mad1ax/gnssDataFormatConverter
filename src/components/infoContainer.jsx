@@ -20,6 +20,9 @@ const InfoContainer = ({ fileInfo, fileName }) => {
               <li className='list-group-item p-1'>
                 разделитель: {fileInfo.divider}
               </li>
+              <li className='list-group-item p-1'>
+                число точек: {fileInfo.pointNumber}
+              </li>
             </>
           )}
         </ol>

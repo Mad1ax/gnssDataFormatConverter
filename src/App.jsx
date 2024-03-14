@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { getFileInfo, showOnMap, checkString } from './utils/utils';
 import MainTable from './components/mainTable';
 import ProjectHeader from './components/projectHeader';
 import AboutContainer from './components/aboutContainer';
 import LeafletMap from './components/leafletMap';
-
-// import { kmlPointsEntry, kmlTrackEntry } from './utils/kmlIntro';
-import { getFileInfo } from './utils/utils';
 import InfoContainer from './components/infoContainer';
 import ButtonsContainer from './components/buttonsContainer';
 
 const App = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [loadedFileName, setLoadedFileName] = useState('');
+  const currentVersion = '2.1'
+  useEffect(() => {
+    console.log(`current version v ${currentVersion}`);
+  }, []);
 
+  //file-form value
+  const [inputValue, setInputValue] = useState('');
   //file info
+  const [loadedFileName, setLoadedFileName] = useState('');
   const [fileInfo, setFileInfo] = useState({
     type: '',
     format: '',
     divider: '',
+    pointNumber: '',
     error: '',
   });
-
-  //table data
+  //export table data
   const [dataDD, setDataDD] = useState([]);
   const [dataDMM, setDataDMM] = useState([]);
   const [dataDMS, setDataDMS] = useState([]);
   const [tableData, setTableData] = useState([]);
-
   //markers data
   const [markerData, setMarkerData] = useState([]);
   const [mapContainerSettings, setMapContainerSettings] = useState({
@@ -45,15 +46,7 @@ const App = () => {
     setInputValue(e.target.value);
     initialFormData = e.target.value.trim().replaceAll(`\r`, '').split(`\n`);
     let checkedString = initialFormData[0];
-
-    if (checkedString) {
-      setFileInfo({
-        ...fileInfo,
-        format: getFileInfo(checkedString).format,
-        divider: getFileInfo(checkedString).divider,
-        error: getFileInfo(checkedString).error,
-      });
-    }
+    checkString(checkedString, fileInfo, setFileInfo, getFileInfo);
   };
 
   //загрузка файла
@@ -69,14 +62,7 @@ const App = () => {
         .replaceAll(`\r`, '')
         .split(`\n`)[0];
 
-      if (checkedString) {
-        setFileInfo({
-          ...fileInfo,
-          format: getFileInfo(checkedString).format,
-          divider: getFileInfo(checkedString).divider,
-          error: getFileInfo(checkedString).error,
-        });
-      }
+      checkString(checkedString, fileInfo, setFileInfo, getFileInfo);
     };
     console.log('загружаю файл', file.name);
     setLoadedFileName(file.name);
@@ -92,7 +78,6 @@ const App = () => {
       divider: '',
       error: '',
     });
-
     setDataDD([]);
     setDataDMM([]);
     setDataDMS([]);
@@ -103,50 +88,18 @@ const App = () => {
       zoom: 13,
     });
     setTableData([]);
-
-    // file = ''
-    //   setTableData([]);
-    //   showOnMap([]);
-
-    // console.log(reader);
-    // setConvertedData('');
-    // setFileLoaded(false);
-    // setFileChecked(false);
     console.log('данные очищены');
     // window.location.reload(false);
   };
 
-  //отображение маркеров
-  function showOnMap(markerData) {
-    let markers = [];
-    let markerObject = {};
-    if (markerData.length > 0) {
-      markerData.forEach((e) => {
-        markerObject = {
-          geocode: [Number(e.lat), Number(e.long)],
-          popup: e.lat + ' ' + e.long,
-          key: e.lat + ' ' + e.long,
-        };
-        markers.push(markerObject);
-      });
-    }
-    setMarkerData(markers);
-    console.log('маркеры отображены');
-
-    setMapContainerSettings({
-      center: markers[Math.ceil(markers.length / 2)].geocode,
-      zoom: 14,
-    });
-  }
-
-  //проверка файла
-  const convertData = () => {
+  // обработка файла
+  const dataProcessing = () => {
     if (inputValue) {
       initialFormData = inputValue.trim().replaceAll(`\r`, '').split(`\n`);
       console.log('проверяю файл');
       let valueDivider = fileInfo.divider;
 
-      //определение формата
+      // //определение формата
       let dataFormat = '';
       let latDegreeIndex = '';
       let latMinuteIndex = '';
@@ -174,8 +127,6 @@ const App = () => {
           console.log('error data format');
         }
       });
-
-      //   console.log('dataFormat', dataFormat, latDegreeIndex, longDegreeIndex);
 
       //обработка данных
       initialFormData.forEach((elem) => {
@@ -215,21 +166,26 @@ const App = () => {
 
           finalLatDD =
             latA.toString() +
-            (+latB / 60 + latC / 3600).toFixed(5).toString().slice(1);
+            (+latB / 60 + latC / 3600).toFixed(7).toString().slice(1);
 
           finalLatDMM =
-            latA.toString() + '°' + (+latB + latC / 60).toFixed(4) + `'`;
+            latA.toString() + '°' + (+latB + latC / 60).toFixed(6) + `'`;
 
           finalLatDMS = currentLat;
 
           finalLongDD =
             longA.toString() +
-            (+longB / 60 + longC / 3600).toFixed(5).toString().slice(1);
+            (+longB / 60 + longC / 3600).toFixed(7).toString().slice(1);
 
           finalLongDMM =
-            longA.toString() + '°' + (+longB + longC / 60).toFixed(4) + `'`;
+            longA.toString() + '°' + (+longB + longC / 60).toFixed(6) + `'`;
+
           finalLongDMS = currentLong;
         } else if (dataFormat === `DD°MMMM`) {
+          // console.log('currentLat', currentLat);
+          // console.log('latDegreeIndex', latDegreeIndex);
+          // console.log(latA, latB, latC);
+
           latA = currentLat.slice(0, latDegreeIndex);
           latDotIndexDmm = currentLat.indexOf('.');
           latB = currentLat.slice(latDegreeIndex + 1, latDotIndexDmm);
@@ -246,19 +202,20 @@ const App = () => {
             longDegreeIndex + 1,
             currentLong.length - 1
           );
-          finalLatDD = latA + '.' + (latMM / 0.0006).toFixed(0);
+
+          finalLatDD = latA + '.' + (+latMM / 0.000006).toFixed(0);
           finalLatDMM = currentLat;
           finalLatDMS =
-            latA + '°' + latB + `'` + (Number(latC) * 0.006).toFixed(2) + `"`;
+            latA + '°' + latB + `'` + (Number(latC) * 0.006).toFixed(3) + `"`;
 
-          finalLongDD = longA + `.` + (longMM / 0.0006).toFixed(0);
+          finalLongDD = longA + `.` + (+longMM / 0.000006).toFixed(0);
           finalLongDMM = currentLong;
           finalLongDMS =
             longA +
             '°' +
             longB +
             `'` +
-            (Number(longC) * 0.006).toFixed(2) +
+            (Number(longC) * 0.006).toFixed(3) +
             `"`;
         } else if (dataFormat === `DD.DDDD`) {
           latA = currentLat.slice(0, latDegreeIndex);
@@ -275,7 +232,7 @@ const App = () => {
             (
               finalLatDMM.slice(latDotIndexDms + 1, finalLatDMM.length - 1) *
               0.00006
-            ).toFixed(2) +
+            ).toFixed(3) +
             `"`;
           finalLatDMM =
             latA.toString() + '°' + (Number(latMM) * 60).toFixed(4) + `'`;
@@ -289,7 +246,7 @@ const App = () => {
             (
               finalLongDMM.slice(longDotIndexDms + 1, finalLongDMM.length - 1) *
               0.00006
-            ).toFixed(2) +
+            ).toFixed(3) +
             `"`;
           finalLongDMM =
             longA.toString() + '°' + (Number(longMM) * 60).toFixed(4) + `'`;
@@ -306,7 +263,13 @@ const App = () => {
       setDataDMM(arrDMM);
       setDataDMS(arrDMS);
       setTableData([arrDD, arrDMM, arrDMS]);
-      showOnMap(arrDD);
+      // console.log('initialFormData.length', initialFormData.length);
+
+      showOnMap(arrDD, setMarkerData, setMapContainerSettings);
+      setFileInfo({
+        ...fileInfo,
+        pointNumber: initialFormData.length,
+      });
     } else {
       console.log('вставьте данные');
     }
@@ -330,16 +293,15 @@ const App = () => {
             ></textarea>
           </div>
 
-
           <div className='controlContainer ms-0'>
             <InfoContainer fileInfo={fileInfo} fileName={loadedFileName} />
             <ButtonsContainer
               fileLoader={fileLoader}
-              convertData={convertData}
+              dataProcessing={dataProcessing}
               dataDD={dataDD}
               inputClear={inputClear}
             />
-              <AboutContainer />
+            <AboutContainer />
           </div>
 
           <LeafletMap

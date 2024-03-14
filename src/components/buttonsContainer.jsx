@@ -1,7 +1,7 @@
 import { kmlPointsEntry, kmlTrackEntry } from "../utils/kmlIntro";
 import { downloadFile } from "../utils/utils";
 
-const ButtonsContainer = ({ fileLoader, convertData, dataDD, inputClear }) => {
+const ButtonsContainer = ({ fileLoader, dataProcessing, dataDD, inputClear }) => {
   return (
     <div className=' buttonContainer p-2 border rounded ms-2'>
       <label className='input-file'>
@@ -33,7 +33,7 @@ const ButtonsContainer = ({ fileLoader, convertData, dataDD, inputClear }) => {
         className='btn btn-info border-secondary'
         id='func-buttons'
         type='button'
-        onClick={convertData}
+        onClick={dataProcessing}
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'
